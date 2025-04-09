@@ -380,13 +380,79 @@ public:
     }
 };
 
-//MessagingSystem(Meditator Pattern)
-class MessagingSystem {
-public:
-    void sendNotification(const string& recipient, const string& message) {
-        cout << "[Notification to " << recipient << "]: " << message << endl;
-    }
-};
+// Mediator Class
+class MessageMediator {
+    public:
+        virtual void sendMessage(const string& sender, const string& receiver, const string& content, const string& timestamp) = 0;
+        virtual void displayMessages(const string& user) = 0;
+    };
+    
+    // Message Class (for Sending Messages)
+    class Message {
+    public:
+        string sender;
+        string receiver;
+        string content;
+        string timestamp;
+    
+        string serialize() const {
+            return sender + "," + receiver + "," + content + "," + timestamp + "\n";
+        }
+    
+        static Message deserialize(const string& line) {
+            Message message;
+            stringstream ss(line);
+            string token;
+    
+            getline(ss, message.sender, ',');
+            getline(ss, message.receiver, ',');
+            getline(ss, message.content, ',');
+            getline(ss, message.timestamp, ',');
+    
+            return message;
+        }
+    };
+    
+    // MessageManager Class
+    class MessageManager : public MessageMediator {
+    private:
+        vector<Message> messages;
+    
+        void loadMessages() {
+            ifstream inFile("messages.txt");
+            string line;
+            while (getline(inFile, line)) {
+                messages.push_back(Message::deserialize(line));
+            }
+            inFile.close();
+        }
+    
+        void saveMessages() {
+            ofstream outFile("messages.txt");
+            for (const auto& message : messages) {
+                outFile << message.serialize();
+            }
+            outFile.close();
+        }
+    
+    public:
+        MessageManager() { loadMessages(); }
+    
+        void sendMessage(const string& sender, const string& receiver, const string& content, const string& timestamp) override {
+            Message newMessage = {sender, receiver, content, timestamp};
+            messages.push_back(newMessage);
+            saveMessages();
+            cout << "Message sent successfully to " << receiver << "!" << endl;
+        }
+    
+        void displayMessages(const string& user) override {
+            for (const auto& message : messages) {
+                if (message.receiver == user) {
+                    cout << "From: " << message.sender << " | Content: " << message.content << " | Sent at: " << message.timestamp << endl;
+                }
+            }
+        }
+    };
 
 //Payment Method(Proxy Design Pattern)
 class Payment {
@@ -417,6 +483,7 @@ int main() {
     UserManager userManager;
     CarManager carManager;
     BookingManager bookingManager;
+    MessageManager messageManager;
 
     // User Registration
     cout << "User Registration\n";
@@ -526,6 +593,24 @@ int main() {
     Payment* payment = new PaymentProxy();
     payment->process(price);
     delete payment;
+
+    // Sending a Message
+    cout << "\nSending a Message\n";
+    string receiver, messageContent, timestamp;
+
+    cout << "Enter the receiver's email: ";
+    cin >> receiver;
+    cout << "Enter your message: ";
+    cin.ignore(); // Clear the input buffer before getting message content
+    getline(cin, messageContent);
+    cout << "Enter the timestamp: ";
+    getline(cin, timestamp);
+
+    messageManager.sendMessage(authEmail, receiver, messageContent, timestamp);
+
+    // Display Messages
+    cout << "\nDisplaying Messages for " << authEmail << ":\n";
+    messageManager.displayMessages(authEmail);
 
     return 0;
 }
