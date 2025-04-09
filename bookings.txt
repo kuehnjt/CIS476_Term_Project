@@ -1,0 +1,4 @@
+Alice,Tesla,,,1
+Alice,Ford,2025-04-09,2025-04-11,1
+joshk,Toyota,2025-04-22,2025-04-27,1
+kuehnjt@umich.edu,Kia,2025-04-12,2025-04-16,1
