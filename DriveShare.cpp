@@ -9,7 +9,7 @@
 
 using namespace std;
 
-// =================== Singleton Pattern ===================
+//Singleton Pattern through Session
 class Session {
 private:
     static Session* instance;
@@ -28,6 +28,7 @@ public:
 };
 Session* Session::instance = nullptr;
 
+//Chain of Responsibility through Security Questions
 class SecurityQuestionHandler {
     public:
         virtual ~SecurityQuestionHandler() {}
@@ -43,7 +44,7 @@ class SecurityQuestionHandler {
     
         bool handleSecurityQuestion(const string& question, const string& answer) override {
             if (question == "What is your mother's maiden name?") {
-                string correctAnswer = "Smith";  // Example answer
+                string correctAnswer = "Smith";  // Sample answer
                 if (answer == correctAnswer) {
                     cout << "Answer correct!\n";
                     return true;
@@ -65,7 +66,7 @@ class SecurityQuestionHandler {
     
         bool handleSecurityQuestion(const string& question, const string& answer) override {
             if (question == "What was the name of your first pet?") {
-                string correctAnswer = "Buddy";  // Example answer
+                string correctAnswer = "Buddy";  // Sample answer
                 if (answer == correctAnswer) {
                     cout << "Answer correct!\n";
                     return true;
@@ -87,7 +88,7 @@ class SecurityQuestionHandler {
     
         bool handleSecurityQuestion(const string& question, const string& answer) override {
             if (question == "What is the name of your high school?") {
-                string correctAnswer = "Saline";  // Example answer
+                string correctAnswer = "Saline";  // Sample answer
                 if (answer == correctAnswer) {
                     cout << "Answer correct!\n";
                     return true;
@@ -100,7 +101,7 @@ class SecurityQuestionHandler {
         }
     };
 
-// =================== User Class ===================
+//User Class
 class User {
     public:
         string email;
@@ -133,7 +134,7 @@ class User {
         }
     };
     
-    // =================== User Authentication and Registration ===================
+    //User Authentification and Registeration
     class UserManager {
     private:
         vector<User> users;
@@ -192,7 +193,7 @@ class User {
         }
     };
 
-// =================== Car Management ===================
+//Car Management(Builder Pattern)
 class Car {
 public:
     string model;
@@ -300,7 +301,7 @@ public:
     }
 };
 
-// =================== Booking System ===================
+//Booking System(Updates assisted by Observer Pattern)
 class Booking {
 public:
     string renter;
@@ -379,7 +380,7 @@ public:
     }
 };
 
-// =================== Messaging System ===================
+//MessagingSystem(Meditator Pattern)
 class MessagingSystem {
 public:
     void sendNotification(const string& recipient, const string& message) {
@@ -387,7 +388,7 @@ public:
     }
 };
 
-// =================== Payment System ===================
+//Payment Method(Proxy Design Pattern)
 class Payment {
 public:
     virtual void process(float amount) = 0;
@@ -411,7 +412,7 @@ public:
     }
 };
 
-// =================== Main Function ===================
+//Testing
 int main() {
     UserManager userManager;
     CarManager carManager;
